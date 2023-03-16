@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    {% if user.image_url %}
+       <img src="{{ user.image_url }}" alt="">
+    {% endif %}
+</div>
+<div>
+    {{ user.first_name }} {{ user.last_name }}
+
+    <a href = "/users/{{ user.id }}/edit"><button>edit</button></a>
+    <form method = "POST">
+        <button>delete</button>
+    </form>
+</div>
+
+{% endblock %}
