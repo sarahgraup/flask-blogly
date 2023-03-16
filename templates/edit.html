@@ -1,7 +1,7 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block content %}
-    <form method = "POST" action = "/users">
-        <p>First Name:  <input name="first_name" 
+    <form method = "POST" action = "/users/{{user.id}}/edit">
+        <p>First Name:  <input name="first_name"
             value = {{user.first_name}}></p>
         <p>Last Name:  <input name="last_name"
             value = {{user.last_name}}></p>
@@ -10,7 +10,7 @@
         <button>Save</button>
     </form>
     <a href = "/users/{{ user.id }}"><button>cancel</button></a>
-   
+
 
 
 {% endblock %}

@@ -31,5 +31,5 @@ class User(db.Model):
         nullable = False)
 
     image_url = db.Column(
-        db.String(100))
+        db.Text)
 

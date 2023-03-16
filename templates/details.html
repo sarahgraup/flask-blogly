@@ -9,7 +9,7 @@
     {{ user.first_name }} {{ user.last_name }}
 
     <a href = "/users/{{ user.id }}/edit"><button>edit</button></a>
-    <form method = "POST">
+    <form action="/users/{{ user.id }}/delete" method = "POST">
         <button>delete</button>
     </form>
 </div>

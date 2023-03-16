@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = 'its a secret'
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -23,14 +23,14 @@ connect_db(app)
 
 @app.get('/')
 def get_root_directory():
-    """ """
+    """ redirects to list of users """
 
     return redirect('/users')
 
 
 @app.get('/users')
 def get_users_page():
-    """  """
+    """ shows all users with add user button """
 
     users = User.query.all()
 
@@ -38,13 +38,13 @@ def get_users_page():
 
 @app.get('/users/new')
 def show_new_user_form():
-    """  """
+    """ shows new user sign up form """
 
     return render_template('new.html')
 
 @app.post('/users/new')
 def process_add_form():
-    """  """
+    """ process the add form inputs and redirects to users page """
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
@@ -62,30 +62,42 @@ def process_add_form():
 
 @app.get('/users/<int:user_id>')
 def show_user_info(user_id):
-    """ """
+    """ shows user details """
+
     user = User.query.get(user_id)
+
     return render_template('details.html',user = user)
+
 @app.get('/users/<int:user_id>/edit')
 def show_edit_user(user_id):
+    """ shows edit page for a specific user """
+
     user = User.query.get(user_id)
+
     return render_template('edit.html', user=user)
 
 @app.post('/users/<int:user_id>/edit')
 def edit_user(user_id):
+    """ processes user edit form values and redirects to users page """
+
     user = User.query.get(user_id)
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
     user.image_url = request.form.get('image_url')
 
     db.session.commit()
+
     return redirect ("/users")
 
+@app.post('/users/<int:user_id>/delete')
+def delete_user(user_id):
+    """ deletes the user and redirects to users page """
 
+    user = User.query.get(user_id)
 
+    user.query.delete()
+    # db.session.delete(user)- Ask about what the difference is
+    db.session.commit()
 
+    return redirect('/users')
 
-# stmt = (
-# ...     update(user_table)
-# ...     .where(user_table.c.name == "patrick")
-# ...     .values(fullname="Patrick the Star")
-# ... )
