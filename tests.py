@@ -64,6 +64,8 @@ class UserViewTestCase(TestCase):
             self.assertIn("test1_last", html)
 
     def add_user(self):
+        """Test adding user and redirects"""
+
         with self.client as c:
             resp = c.post('/users/new', data={
                 'first_name':'James',
@@ -71,16 +73,29 @@ class UserViewTestCase(TestCase):
                 'image_url':'https://images.unsplash.com/photo-1603415526960-f7e0'
                  + '328c63b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfH'
                  + 'x8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-            })
+            }, follow_redirects=True)
 
             self.assertEqual(resp.status_code, 200)
             html = resp.get_data(as_text=True)
 
             self.assertIn('James Smith', html)
+    
+    def show_user_details(self):
+        """Test getting user details"""
+
+        with self.client as c:
+            resp = c.get('/users/{self.user_id}')
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('test1_first test1_last', html)
+
 
     def edit_user(self):
+        """ Test changing user data"""
+
         with self.client as c:
-            resp = c.post('/users/1/edit', data={
+            resp = c.post('/users/{self.user_id}/edit', data={
                 'first_name':'Kevin',
                 'last_name':'Matthews',
             }, follow_redirects=True)
@@ -90,4 +105,24 @@ class UserViewTestCase(TestCase):
 
             self.assertIn('Kevin Mathews', html)
             self.assertEqual(resp.location, '/users')
+            
+
+    def delete_user(self):
+        """ Test deleting user data"""
+        
+        with self.client as c:
+            resp = c.post('/users/{self.user_id}/delete', follow_redirects = True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertNotIn('Kevin Mathews', html)
+            self.assertEqual(resp.location, '/users')
+
+
+
+
+
+
+
 

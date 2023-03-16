@@ -5,7 +5,7 @@ import os
 from flask import Flask, redirect, render_template, request
 from models import connect_db, User, db, connect_db
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy import update
+
 
 
 app = Flask(__name__)
@@ -48,9 +48,9 @@ def process_add_form():
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
-    image_url = request.form.get('image_url')
+    image_url = request.form.get('image_url') #dont need get because form will always have image_url
 
-    image_url = image_url if image_url else None
+    image_url = image_url if image_url else None #either pass in empty string or default image
 
     new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
 
@@ -64,7 +64,7 @@ def process_add_form():
 def show_user_info(user_id):
     """ shows user details """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
 
     return render_template('details.html',user = user)
 
@@ -72,7 +72,7 @@ def show_user_info(user_id):
 def show_edit_user(user_id):
     """ shows edit page for a specific user """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id) 
 
     return render_template('edit.html', user=user)
 
@@ -80,10 +80,12 @@ def show_edit_user(user_id):
 def edit_user(user_id):
     """ processes user edit form values and redirects to users page """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
-    user.image_url = request.form.get('image_url')
+    user.image_url = request.form['image_url']
+
+    user.image_url = user.image_url if user.image_url else None
 
     db.session.commit()
 
@@ -93,10 +95,10 @@ def edit_user(user_id):
 def delete_user(user_id):
     """ deletes the user and redirects to users page """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
 
-    user.query.delete()
-    # db.session.delete(user)- Ask about what the difference is
+    # user.query.delete()
+    db.session.delete(user)
     db.session.commit()
 
     return redirect('/users')
