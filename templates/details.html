@@ -6,12 +6,27 @@
     {% endif %}
 </div>
 <div>
-    {{ user.first_name }} {{ user.last_name }}
+    <div>
+        {{ user.first_name }} {{ user.last_name }}
 
-    <a href = "/users/{{ user.id }}/edit"><button>edit</button></a>
-    <form action="/users/{{ user.id }}/delete" method = "POST">
-        <button>delete</button>
-    </form>
+        <a href = "/users/{{ user.id }}/edit"><button>edit</button></a>
+        <form action="/users/{{ user.id }}/delete" method = "POST">
+            <button>delete</button>
+        </form>
+    </div>
+    <div>
+        <h1>Posts</h1>
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <form action="/users/{{ user.id }}/posts/new" method = "GET">
+            <button>Add Post</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

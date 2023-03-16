@@ -3,7 +3,7 @@
 import os
 
 from flask import Flask, redirect, render_template, request
-from models import connect_db, User, db, connect_db
+from models import connect_db, User, db, connect_db, Post
 from flask_debugtoolbar import DebugToolbarExtension
 
 
@@ -19,6 +19,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+
+
 
 
 @app.get('/')
@@ -65,14 +67,15 @@ def show_user_info(user_id):
     """ shows user details """
 
     user = User.query.get_or_404(user_id)
+    posts = Post.query.filter(Post.user_id == user_id).all()
 
-    return render_template('details.html',user = user)
+    return render_template('details.html',user=user, posts=posts)
 
 @app.get('/users/<int:user_id>/edit')
 def show_edit_user(user_id):
     """ shows edit page for a specific user """
 
-    user = User.query.get_or_404(user_id) 
+    user = User.query.get_or_404(user_id)
 
     return render_template('edit.html', user=user)
 
@@ -103,3 +106,28 @@ def delete_user(user_id):
 
     return redirect('/users')
 
+# PART 2
+
+@app.get('/users/<int:user_id>/posts/new')
+def show_post_form(user_id):
+    """ shows user the create new post form """
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template('new_post.html', user=user)
+
+@app.post('/users/<int:user_id>/posts/new')
+def process_post_form(user_id):
+    """ processes post form values and redirects to user detail page """
+
+    user = User.query.get_or_404(user_id)
+
+    title = request.form['post_title']
+    content = request.form['post_content']
+
+    new_post = Post(title=title, content=content, created_at='2023-03-03', user_id=user.id)
+
+    db.session.add(new_post)
+    db.session.commit()
+
+    return redirect(f'/users/{user_id}')
