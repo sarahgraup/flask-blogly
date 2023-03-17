@@ -2,3 +2,28 @@ img {
   height: 250px;
   width: 250px;
 }
+
+* {
+  color: rgb(50, 50, 141);
+  font-family: Arial;
+
+}
+
+html {
+  background-color: rgb(192, 192, 127);
+}
+
+button {
+  text-transform: uppercase;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  text-transform: uppercase;
+}

@@ -99,7 +99,12 @@ def delete_user(user_id):
     """ deletes the user and redirects to users page """
 
     user = User.query.get_or_404(user_id)
+    posts = Post.query.filter(Post.user_id == user_id).all()
 
+    for post in posts:  #user.posts
+        db.session.delete(post)
+
+    # db.session.delete(post)
     db.session.delete(user)
     db.session.commit()
 
@@ -126,7 +131,7 @@ def process_post_form(user_id):
     title = request.form['post_title']
     content = request.form['post_content']
 
-    new_post = Post(title=title, content=content, created_at='2023-03-03', user_id=user.id)
+    new_post = Post(title=title, content=content, created_at='2023-03-03', user_id=user.id)  #take out create_at
 
     db.session.add(new_post)
     db.session.commit()
@@ -135,7 +140,7 @@ def process_post_form(user_id):
 
 @app.get('/posts/<int:post_id>')
 def show_post(post_id):
-    """ show form to add post """
+    """ show form to add post """ #fix doc string
 
     post = Post.query.get_or_404(post_id)
     user_id = post.user_id

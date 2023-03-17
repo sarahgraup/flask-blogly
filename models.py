@@ -13,7 +13,7 @@ def connect_db(app):
 
 
 class User(db.Model):
-    """ Creates instance for User """
+    """ Creates instance for User """      # comment regarding relationship with Post class
 
     __tablename__ = 'users'
 
@@ -62,7 +62,7 @@ class Post(db.Model):
         db.ForeignKey("users.id"),
         nullable = False)
 
-    users = db.relationship('User', backref = 'post')
+    users = db.relationship('User', backref = 'post')  #  users => user, post => posts
 
 
 

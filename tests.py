@@ -195,7 +195,7 @@ class PostView(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertNotIn('New Title Here', html)
-            self.assertEqual(resp.location, '/users')
+            self.assertEqual(resp.location, '/users')  #assertIn, check for marker in /users (test-comment)
 
 
 
