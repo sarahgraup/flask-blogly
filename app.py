@@ -143,12 +143,12 @@ def show_post(post_id):
     """ show form to add post """ #fix doc string
 
     post = Post.query.get_or_404(post_id)
-    user_id = post.user_id
-    user = User.query.get(user_id)
+    user_id = post.user_id   # don't need
+    user = User.query.get(user_id)  #don't need
 
-    return render_template('post_details.html', post = post, user = user)
+    return render_template('post_details.html', post=post, user=user)   #user=post.user
 
-@app.get('/posts/<int:post_id>/edit')
+@app.get('/posts/<int:post_id>/edit')   #use relationship like above to grab post.user
 def show_edit_post(post_id):
     """ show post edit form """
 
