@@ -13,7 +13,7 @@ def connect_db(app):
 
 
 class User(db.Model):
-    """ add docstring """
+    """ Creates instance for User """
 
     __tablename__ = 'users'
 
@@ -35,6 +35,8 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    """ Creates instance for Post """
+
     __tablename__ = 'posts'
 
     id = db.Column(
@@ -53,7 +55,7 @@ class Post(db.Model):
     created_at = db.Column(
         db.DateTime,
         nullable = False,
-        default = db.func.now)
+        default = db.func.now())
 
     user_id = db.Column(
         db.Integer,

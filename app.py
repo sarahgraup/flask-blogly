@@ -100,11 +100,12 @@ def delete_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    # user.query.delete()
     db.session.delete(user)
     db.session.commit()
 
     return redirect('/users')
+
+
 
 # PART 2
 
@@ -134,6 +135,8 @@ def process_post_form(user_id):
 
 @app.get('/posts/<int:post_id>')
 def show_post(post_id):
+    """ show form to add post """
+
     post = Post.query.get_or_404(post_id)
     user_id = post.user_id
     user = User.query.get(user_id)
@@ -142,6 +145,8 @@ def show_post(post_id):
 
 @app.get('/posts/<int:post_id>/edit')
 def show_edit_post(post_id):
+    """ show post edit form """
+
     post = Post.query.get_or_404(post_id)
     user_id = post.user_id
     user = User.query.get(user_id)
@@ -150,6 +155,8 @@ def show_edit_post(post_id):
 
 @app.post('/posts/<int:post_id>/edit')
 def process_post_edit(post_id):
+    """ processes the post edit form inputs """
+
     post = Post.query.get_or_404(post_id)
     post.title = request.form['title']
     post.content = request.form['content']
@@ -158,3 +165,14 @@ def process_post_edit(post_id):
     db.session.commit()
 
     return redirect(f"/posts/{post_id}")
+
+@app.post('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    """ deletes the post from the db """
+
+    post = Post.query.get_or_404(post_id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f'/users/{post.user_id}')
